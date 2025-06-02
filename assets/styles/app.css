@@ -1,3 +1,22 @@
 body {
-    background-color: skyblue;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(-45deg, #50C878, #BDB76B, #228B22, #9ACD32);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+    min-height: 100vh;
+    color: white;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
