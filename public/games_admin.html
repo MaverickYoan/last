@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Administration - Connexion & Inscription</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(270deg, #50C878, #8F9779);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        nav {
+            background: rgba(0,0,0,0.5);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #c6f1c6;
+        }
+        .container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 80px;
+            padding-bottom: 40px;
+        }
+        .auth-box {
+            background: rgba(0,0,0,0.7);
+            border-radius: 12px;
+            padding: 30px 40px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            animation: fadeIn 1s ease forwards;
+        }
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.8rem;
+            user-select: none;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            padding: 12px 15px;
+            border-radius: 7px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+            transition: box-shadow 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            box-shadow: 0 0 8px #50c878;
+        }
+        button {
+            background: #50c878;
+            border: none;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 7px;
+            cursor: pointer;
+            color: #000;
+            transition: background 0.4s, transform 0.2s;
+            user-select: none;
+        }
+        button:hover {
+            background: #7edc9a;
+            transform: scale(1.05);
+        }
+        .form-switch {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.9rem;
+            cursor: pointer;
+            user-select: none;
+            color: #a6c9a6;
+        }
+        .form-switch:hover {
+            text-decoration: underline;
+            color: #c6f1c6;
+        }
+        .message {
+            margin: 10px 0 5px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .error {
+            color: #ff6b6b;
+        }
+        .success {
+            color: #a6f1a6;
+        }
+        footer {
+            text-align: center;
+            padding: 15px 20px;
+            background: rgba(0,0,0,0.5);
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Accueil</a>
+        <a href="jeux.html">Jeux</a>
+        <a href="administration.html">Administration</a>
+        <a href="admin.html" aria-current="page" style="color:#c6f1c6;">Connexion/Inscription</a>
+    </nav>
+
+    <main class="container" role="main">
+
+        <section class="auth-box" aria-labelledby="authTitle">
+            <h2 id="authTitle">Connexion</h2>
+
+            <form id="loginForm" aria-describedby="loginMessage" novalidate>
+                <input type="email" id="loginEmail" name="loginEmail" aria-label="Email" placeholder="Email" required autocomplete="username" />
+                <input type="password" id="loginPassword" name="loginPassword" aria-label="Mot de passe" placeholder="Mot de passe" required autocomplete="current-password" />
+                <button type="submit">Se connecter</button>
+            </form>
+            <p id="loginMessage" class="message" role="alert" aria-live="polite"></p>
+
+            <p class="form-switch" tabindex="0" role="button" aria-pressed="false" id="switchToRegister">Pas encore inscrit ? Créez un compte</p>
+        </section>
+
+        <section class="auth-box" id="registerSection" aria-labelledby="registerTitle" hidden>
+            <h2 id="registerTitle">Inscription</h2>
+
+            <form id="registerForm" aria-describedby="registerMessage" novalidate>
+                <input type="text" id="registerUsername" name="registerUsername" aria-label="Nom d'utilisateur" placeholder="Nom d'utilisateur" required autocomplete="username" />
+                <input type="email" id="registerEmail" name="registerEmail" aria-label="Email" placeholder="Email" required autocomplete="email" />
+                <input type="password" id="registerPassword" name="registerPassword" aria-label="Mot de passe" placeholder="Mot de passe" required autocomplete="new-password" />
+                <select id="registerRole" name="registerRole" aria-label="Rôle utilisateur" required>
+                    <option value="" disabled selected>Choisir un rôle</option>
+                    <option value="utilisateur">Utilisateur</option>
+                    <option value="administrateur">Administrateur</option>
+                </select>
+                <button type="submit">S'inscrire</button>
+            </form>
+            <p id="registerMessage" class="message" role="alert" aria-live="polite"></p>
+
+            <p class="form-switch" tabindex="0" role="button" aria-pressed="false" id="switchToLogin">Déjà un compte ? Connectez-vous</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2023 Games. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        // Elements
+        const loginForm = document.getElementById('loginForm');
+        const loginMessage = document.getElementById('loginMessage');
+        const registerForm = document.getElementById('registerForm');
+        const registerMessage = document.getElementById('registerMessage');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const registerSection = document.getElementById('registerSection');
+        const authBoxes = document.querySelectorAll('.auth-box');
+
+        // Show/hide register and login forms
+        function showRegister() {
+            registerSection.hidden = false;
+            loginForm.parentElement.hidden = true;
+            switchToRegister.setAttribute('aria-pressed', 'true');
+        }
+
+        function showLogin() {
+            registerSection.hidden = true;
+            loginForm.parentElement.hidden = false;
+            switchToRegister.setAttribute('aria-pressed', 'false');
+        }
+
+        // Toggling forms
+        switchToRegister.addEventListener('click', () => {
+            showRegister();
+            clearMessages();
+        });
+        switchToRegister.addEventListener('keypress', e => {
+            if(e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                showRegister();
+                clearMessages();
+            }
+        });
+        switchToLogin.addEventListener('click', () => {
+            showLogin();
+            clearMessages();
+        });
+        switchToLogin.addEventListener('keypress', e => {
+            if(e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                showLogin();
+                clearMessages();
+            }
+        });
+
+        // Clear messages
+        function clearMessages() {
+            loginMessage.textContent = '';
+            loginMessage.className = 'message';
+            registerMessage.textContent = '';
+            registerMessage.className = 'message';
+        }
+
+        // Data storage keys
+        const STORAGE_KEY = 'games_app_users';
+
+        // Get users from localStorage
+        function getUsers() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        }
+        // Save users to localStorage
+        function saveUsers(users) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+        }
+
+        // Simple password hash (not secure, just illustrative, client side only)
+        function hashPassword(password) {
+            let hash = 0;
+            for (let i = 0; i < password.length; i++) {
+                hash = (hash << 5) - hash + password.charCodeAt(i);
+                hash |= 0; // Convert to 32bit integer
+            }
+            return hash.toString();
+        }
+
+        // Registration handler
+        registerForm.addEventListener('submit', e => {
+            e.preventDefault();
+            clearMessages();
+
+            const username = registerForm.registerUsername.value.trim();
+            const email = registerForm.registerEmail.value.trim().toLowerCase();
+            const password = registerForm.registerPassword.value;
+            const role = registerForm.registerRole.value;
+
+            if (!username || !email || !password || !role) {
+                registerMessage.textContent = "Veuillez remplir tous les champs.";
+                registerMessage.classList.add('error');
+                return;
+            }
+            if (!validateEmail(email)) {
+                registerMessage.textContent = "Email invalide.";
+                registerMessage.classList.add('error');
+                return;
+            }
+            const users = getUsers();
+            if(users.some(u => u.email === email)) {
+                registerMessage.textContent = "Cet email est déjà utilisé.";
+                registerMessage.classList.add('error');
+                return;
+            }
+
+            const newUser = {
+                username,
+                email,
+                passwordHash: hashPassword(password),
+                role
+            };
+            users.push(newUser);
+            saveUsers(users);
+
+            registerMessage.textContent = "Inscription réussie. Vous pouvez maintenant vous connecter.";
+            registerMessage.classList.add('success');
+            registerForm.reset();
+        });
+
+        // Login handler
+        loginForm.addEventListener('submit', e => {
+            e.preventDefault();
+            clearMessages();
+
+            const email = loginForm.loginEmail.value.trim().toLowerCase();
+            const password = loginForm.loginPassword.value;
+
+            if (!email || !password) {
+                loginMessage.textContent = "Veuillez remplir tous les champs.";
+                loginMessage.classList.add('error');
+                return;
+            }
+            if (!validateEmail(email)) {
+                loginMessage.textContent = "Email invalide.";
+                loginMessage.classList.add('error');
+                return;
+            }
+
+            const users = getUsers();
+            const user = users.find(u => u.email === email);
+            if (!user) {
+                loginMessage.textContent = "Aucun compte trouvé pour cet email.";
+                loginMessage.classList.add('error');
+                return;
+            }
+            if (user.passwordHash !== hashPassword(password)) {
+                loginMessage.textContent = "Mot de passe incorrect.";
+                loginMessage.classList.add('error');
+                return;
+            }
+
+            loginMessage.textContent = `Bienvenue ${user.username}! Redirection...`;
+            loginMessage.classList.add('success');
+
+            // Store logged-in user in sessionStorage (for session persistence)
+            sessionStorage.setItem('games_app_logged_user', JSON.stringify(user));
+
+            // Redirection selon rôle
+            setTimeout(() => {
+                if(user.role === 'administrateur') {
+                    window.location.href = 'administration.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }, 1500);
+        });
+
+        // Email validation regex simple
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Redirect away from login if already logged in
+        window.onload = () => {
+            const loggedUser = sessionStorage.getItem('games_app_logged_user');
+            if (loggedUser) {
+                const user = JSON.parse(loggedUser);
+                if(user.role === 'administrateur') {
+                    window.location.href = 'administration.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }
+        };
+
+        // Navbar scroll effect
+        window.onscroll = function() {
+            const navbar = document.querySelector('nav');
+            if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                navbar.style.background = "rgba(0,0,0,0.8)";
+            } else {
+                navbar.style.background = "rgba(0,0,0,0.5)";
+            }
+        };
+    </script>
+</body>
+</html>

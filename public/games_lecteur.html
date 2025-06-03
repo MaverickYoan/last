@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Web App Moderne</title>
+<style>
+  /* Reset and base */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+    color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  header {
+    background-color: rgba(0,0,0,0.3);
+    padding: 1.5rem 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+  header h1 {
+    margin: 0;
+    font-weight: 900;
+    letter-spacing: 2px;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+  }
+  main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  section {
+    background: rgba(255,255,255,0.1);
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    padding: 1.8rem;
+    box-shadow: 0 8px 16px rgba(0,0,50,0.4);
+  }
+  section h2 {
+    margin-top: 0;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #FFDD57;
+  }
+  button.primary-btn {
+    background: #FFDD57;
+    border: none;
+    padding: 0.8rem 1.6rem;
+    border-radius: 8px;
+    color: #333;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(255,221,87,0.4);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  button.primary-btn:hover {
+    background: #FFCA28;
+    box-shadow: 0 6px 12px rgba(255,202,40,0.6);
+  }
+  .output {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-family: monospace;
+    color: #03DAC6;
+    min-height: 2rem;
+  }
+  footer {
+    background: rgba(0,0,0,0.2);
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #bbb;
+  }
+  /* Music player styles */
+  .music-player {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .playlist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 150px;
+    overflow-y: auto;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.15);
+  }
+  .playlist li {
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 221, 87, 0.3);
+    color: #FFDD57;
+    transition: background 0.3s ease;
+  }
+  .playlist li:last-child {
+    border-bottom: none;
+  }
+  .playlist li:hover, .playlist li.active {
+    background: #FFDD57;
+    color: #222;
+  }
+  audio {
+    width: 100%;
+    outline: none;
+    border-radius: 8px;
+  }
+  #fileInputLabel {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #FFDD57;
+    color: #333;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(255,221,87,0.4);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  #fileInputLabel:hover {
+    background: #FFCA28;
+    box-shadow: 0 6px 12px rgba(255,202,40,0.6);
+  }
+  #fileInput {
+    display: none;
+  }
+  @media (max-width: 600px) {
+    header h1 {
+      font-size: 2rem;
+    }
+    main {
+      padding: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Bienvenue sur Mon Web App</h1>
+</header>
+<main>
+  <section>
+    <h2>À propos</h2>
+    <p>Cette application web moderne est un point de départ élégant et interactif pour vos projets.</p>
+  </section>
+  <section>
+    <h2>Essayez une interaction</h2>
+    <button class="primary-btn" id="clickMeBtn">Cliquez-moi !</button>
+    <div class="output" id="outputArea">Appuyez sur le bouton pour voir une surprise...</div>
+  </section>
+  <section>
+    <h2>Calculatrice simple</h2>
+    <label for="num1">Nombre 1:</label>
+    <input type="number" id="num1" value="0" style="margin-right:1rem; border-radius:5px; border:none; padding:0.4rem; width:100px;"/>
+    <label for="num2">Nombre 2:</label>
+    <input type="number" id="num2" value="0" style="margin-right:1rem; border-radius:5px; border:none; padding:0.4rem; width:100px;"/>
+    <button class="primary-btn" id="calcSumBtn">Calculer la somme</button>
+    <div class="output" id="calcResult">Résultat: 0</div>
+  </section>
+  <section>
+    <h2>Lecteur de musique</h2>
+    <div class="music-player">
+      <audio id="audioPlayer" controls preload="none">
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_7ac29d9b1b.mp3?filename=happy-rock-11360.mp3" type="audio/mpeg" />
+        Votre navigateur ne supporte pas la balise audio.
+      </audio>
+      <ul class="playlist" id="playlist">
+        <li class="active" data-src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_7ac29d9b1b.mp3?filename=happy-rock-11360.mp3">Happy Rock (Pixabay)</li>
+        <li data-src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_09a08403b0.mp3?filename=ukulele-11294.mp3">Ukulele (Pixabay)</li>
+        <li data-src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_a894a0326c.mp3?filename=sunny-music-5010.mp3">Sunny Music (Pixabay)</li>
+      </ul>
+      <label for="fileInput" id="fileInputLabel">Ajouter vos musiques depuis vos dossiers</label>
+      <input type="file" id="fileInput" accept="audio/*" multiple />
+    </div>
+  </section>
+</main>
+<footer>
+  &copy; 2024 Web App Moderne. Tous droits réservés.
+</footer>
+<script>
+  document.getElementById('clickMeBtn').addEventListener('click', () => {
+    const messages = [
+      "Vous êtes génial ! 🚀",
+      "Continuez comme ça ! 😊",
+      "Le web est fantastique ! 🌐",
+      "Merci d'utiliser cette app ! 🙏",
+      "Aujourd'hui est un beau jour ! ☀️"
+    ];
+    let msg = messages[Math.floor(Math.random() * messages.length)];
+    document.getElementById('outputArea').textContent = msg;
+  });
+
+  document.getElementById('calcSumBtn').addEventListener('click', () => {
+    const num1 = Number(document.getElementById('num1').value);
+    const num2 = Number(document.getElementById('num2').value);
+    const sum = num1 + num2;
+    document.getElementById('calcResult').textContent = 'Résultat: ' + sum;
+  });
+
+  // Music player functionality
+  const audioPlayer = document.getElementById('audioPlayer');
+  const playlist = document.getElementById('playlist');
+  const tracks = playlist.getElementsByTagName('li');
+  const fileInput = document.getElementById('fileInput');
+
+  function clearActiveClass() {
+    for (let track of playlist.children) {
+      track.classList.remove('active');
+    }
+  }
+  function playTrack(trackElement) {
+    clearActiveClass();
+    trackElement.classList.add('active');
+    const src = trackElement.getAttribute('data-src');
+    audioPlayer.src = src;
+    audioPlayer.play();
+  }
+
+  for (let i = 0; i < tracks.length; i++) {
+    tracks[i].addEventListener('click', function () {
+      playTrack(this);
+    });
+  }
+
+  audioPlayer.addEventListener('ended', () => {
+    let currentIndex = -1;
+    for (let i = 0; i < playlist.children.length; i++) {
+      if (playlist.children[i].classList.contains('active')) {
+        currentIndex = i;
+        break;
+      }
+    }
+    const nextIndex = (currentIndex + 1) % playlist.children.length;
+    playTrack(playlist.children[nextIndex]);
+  });
+
+  // Handle local files selection
+  fileInput.addEventListener('change', (event) => {
+    const files = event.target.files;
+    if (files.length === 0) return;
+
+    // Clear existing playlist items
+    playlist.innerHTML = '';
+
+    // Revoke any existing object URLs created from past loads
+    if (audioPlayer.src.startsWith('blob:')) {
+      URL.revokeObjectURL(audioPlayer.src);
+    }
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const url = URL.createObjectURL(file);
+      const li = document.createElement('li');
+      li.textContent = file.name;
+      li.setAttribute('data-src', url);
+      if (i === 0) {
+        li.classList.add('active');
+        audioPlayer.src = url;
+        audioPlayer.play();
+      }
+      li.addEventListener('click', () => {
+        playTrack(li);
+      });
+      playlist.appendChild(li);
+    }
+  });
+</script>
+</body>
+</html>
